@@ -19,12 +19,12 @@ setTimeout(() => {
     heroTexts.style.animation = "fade 2s ease 1 normal";
     heroTexts.style.opacity = "1";
 
-}, 600);
+}, 400);
 setTimeout(() => {
     headInfo.style.animation = "fade 1s ease 1 normal";
     headInfo.style.opacity = "1";
 
-}, 1500);
+}, 1200);
 
 setTimeout(() => {
     cons.forEach((element) => {
@@ -33,7 +33,7 @@ setTimeout(() => {
 
   
 
-}, 2000);
+}, 1500);
 
 discord.onclick = () => {
   navigator.clipboard.writeText("serenestriker_");
