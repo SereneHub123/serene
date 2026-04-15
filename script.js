@@ -46,7 +46,7 @@ discord.onclick = () => {
 }})
 
 
-function click(){
+function playClick(){
   const audio = new Audio('assets/click.mp3');
   audio.play();
 }
