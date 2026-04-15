@@ -3,19 +3,28 @@ const headInfo = document.querySelector(".head__info");
 const heroTexts = document.querySelector(".hero_texts");
 const cons = document.querySelectorAll(".cons");
 
+
 document.addEventListener('DOMContentLoaded', () => {
 
 headInfo.style.opacity = "0";
+heroTexts.style.opacity = "0";
+
 
 cons.forEach((element) => {
     element.style.opacity = "0";
 
 });
+
+setTimeout(() => {
+    heroTexts.style.animation = "fade 2s ease 1 normal";
+    heroTexts.style.opacity = "1";
+
+}, 600);
 setTimeout(() => {
     headInfo.style.animation = "fade 1s ease 1 normal";
     headInfo.style.opacity = "1";
 
-}, 800)
+}, 1500);
 
 setTimeout(() => {
     cons.forEach((element) => {
@@ -24,7 +33,7 @@ setTimeout(() => {
 
   
 
-}, 1200)
+}, 2000);
 
 discord.onclick = () => {
   navigator.clipboard.writeText("serenestriker_");
@@ -36,5 +45,9 @@ discord.onclick = () => {
   }, 1000);
 }})
 
-;
+
+function click(){
+  const audio = new Audio('assets/click.mp3');
+  audio.play();
+}
 
