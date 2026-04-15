@@ -43,6 +43,8 @@ discord.onclick = () => {
     discord.innerHTML = '<i class="fa-brands fa-discord"></i>';
 
   }, 1000);
+   const audioDis = new Audio('assets/click.mp3');
+  audioDis.play();
 }})
 
 
