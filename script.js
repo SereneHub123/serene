@@ -2,12 +2,16 @@ const discord = document.querySelector(".discord");
 const headInfo = document.querySelector(".head__info");
 const heroTexts = document.querySelector(".hero_texts");
 const cons = document.querySelectorAll(".cons");
+const toast = document.querySelector('.toast');
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
 headInfo.style.opacity = "0";
 heroTexts.style.opacity = "0";
+toast.style.opacity = "0";
+
 
 
 cons.forEach((element) => {
@@ -53,3 +57,13 @@ function playClick(){
   audio.play();
 }
 
+  setTimeout(() => {
+    toast.style.animation = "toastRight 12s ease 1 normal";
+    toast.style.opacity = "1";
+  }, 2500);
+ 
+
+
+function invisible(){
+   toast.style.display = "none";
+}
