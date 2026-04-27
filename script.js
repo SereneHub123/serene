@@ -25,7 +25,7 @@ setTimeout(() => {
 
 }, 400);
 setTimeout(() => {
-    headInfo.style.animation = "fade 1s ease 1 normal";
+    headInfo.style.animation = "fade 4s ease 1 normal";
     headInfo.style.opacity = "1";
 
 }, 1200);
