@@ -58,6 +58,7 @@ function playClick(){
 }
 
   setTimeout(() => {
+    toast.style.display = "flex";
     toast.style.animation = "toastRight 12s ease 1 normal";
     toast.style.opacity = "1";
   }, 2500);

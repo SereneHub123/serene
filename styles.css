@@ -99,6 +99,7 @@ body {
 }
 
 .tech__track {
+    position: relative;
     display: flex;
     width: max-content;
     animation: spin 6s linear infinite;
@@ -135,7 +136,14 @@ body {
 .cons:active {
     scale: 0.9;
 }
-
+.head_tech::before {
+    content: "";
+    position: absolute;
+    width: 1px;
+    top: 50%;
+    left: 50%;
+    background-color: rgba(240, 248, 255, 0.541);
+}
 @keyframes spin {
     from {
         transform: translateX(0);
@@ -169,7 +177,7 @@ body {
 }
 
 .toast {
-    display: flex;
+    display: none;
     align-items: center;
     position: fixed;
     bottom: 20px;
@@ -178,7 +186,7 @@ body {
     backdrop-filter: blur(8px);
     background-color: transparent;
     border: 1px solid rgba(240, 248, 255, 0.199);
-    padding: 0px 10px;
+    padding: 5px 10px;
     z-index: 9999;
     overflow: hidden;
     border-radius: 20px;
@@ -187,16 +195,22 @@ body {
     cursor: pointer;
     font-family: "Cinzel", Verdana, Tahoma, sans-serif;
     color:rgba(194, 196, 197, 0.753);
+    transition: all 0.3s ease;
+}
+.toast a {
+    text-decoration: none;
+    color: aliceblue;
 }
 .toast:hover {
-        background-color: rgba(166, 174, 180, 0.014);
+    background-color: rgba(166, 174, 180, 0.014);
+    box-shadow: 1px 1px 1px rgba(135, 206, 250, 0.473);
 
 }
 .toast button {
     color: rgba(164, 170, 175, 0.432);
     padding: 0;
     background: transparent;
-    border-radius: 100%;
+    border-radius: 5px;
     border: none;
     font-size: 18px;
     transition: all 0.4s ease;
