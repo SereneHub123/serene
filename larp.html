@@ -89,6 +89,7 @@
             display: flex;
             justify-content: center;
             margin: 28px 0 24px;
+            position: relative;
         }
 
         .toggle {
@@ -160,6 +161,109 @@
         .card.off .identity-bar b {
             color: #6c6c74;
         }
+
+        /* ==== Connected FX ==== */
+        .title.pop {
+            animation: titlePop 0.75s cubic-bezier(0.22, 1.2, 0.36, 1);
+        }
+
+        @keyframes titlePop {
+            0% {
+                transform: scale(0.55) scaleY(1.6);
+                filter: blur(6px);
+                opacity: 0.1;
+            }
+            40% {
+                transform: scale(1.18);
+                filter: blur(0);
+                opacity: 1;
+                text-shadow: 0 0 50px rgba(251, 44, 78, 1);
+            }
+            55% {
+                transform: scale(0.94) skewX(-4deg);
+            }
+            70% {
+                transform: scale(1.06) skewX(3deg);
+            }
+            100% {
+                transform: scale(1) skewX(0);
+            }
+        }
+
+        .status.flick {
+            animation: neonFlicker 0.85s steps(1, end);
+        }
+
+        @keyframes neonFlicker {
+            0% {
+                opacity: 1;
+                text-shadow: 0 0 18px rgba(251, 44, 78, 0.9);
+            }
+            8% {
+                opacity: 0;
+            }
+            16% {
+                opacity: 1;
+                text-shadow: 0 0 24px rgba(251, 44, 78, 1);
+            }
+            24% {
+                opacity: 0.25;
+            }
+            32% {
+                opacity: 1;
+            }
+            44% {
+                opacity: 0;
+            }
+            52% {
+                opacity: 1;
+                text-shadow: 0 0 18px rgba(251, 44, 78, 0.9);
+            }
+            58% {
+                opacity: 0.35;
+            }
+            66% {
+                opacity: 1;
+                text-shadow: 0 0 10px rgba(251, 44, 78, 0.5);
+            }
+            100% {
+                opacity: 1;
+                text-shadow: none;
+            }
+        }
+
+        /* spark particles */
+        .spark {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 8px rgba(251, 44, 78, 0.9);
+            pointer-events: none;
+        }
+
+        .toggle.burst {
+            animation: toggleBurst 0.6s ease-out;
+        }
+
+        @keyframes toggleBurst {
+            0% {
+                box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 34px rgba(251, 44, 78, 0.45);
+            }
+            40% {
+                box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 70px rgba(251, 44, 78, 0.95), 0 0 130px rgba(251, 44, 78, 0.55);
+            }
+            100% {
+                box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 34px rgba(251, 44, 78, 0.45);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .title.pop, .status.flick, .toggle.burst {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -188,6 +292,7 @@
         const status = document.getElementById("status");
         const identity = document.getElementById("identity");
         const input = document.getElementById("larpInput");
+        const title = document.querySelector(".title");
 
         let identityOn = "Larping";
         let identityOff = "pricingn't";
@@ -210,7 +315,55 @@
             if (e.target !== toggle) toggle.click();
         });
 
-        toggle.addEventListener("change", refresh);
+        /* ==== Connected FX ==== */
+        function restartFx(el, cls) {
+            el.classList.remove(cls);
+            void el.offsetWidth; /* reflow so the animation can replay */
+            el.classList.add(cls);
+            el.addEventListener("animationend", () => el.classList.remove(cls), { once: true });
+        }
+
+        function sparks() {
+            const rowRect = toggleRow.getBoundingClientRect();
+            const tRect = toggle.getBoundingClientRect();
+            const cx = tRect.left - rowRect.left + tRect.width / 2;
+            const cy = tRect.top - rowRect.top + tRect.height / 2;
+
+            for (let i = 0; i < 14; i++) {
+                const s = document.createElement("span");
+                s.className = "spark";
+                s.style.left = cx + "px";
+                s.style.top = cy + "px";
+                if (i % 3 === 0) s.style.background = "#fb2c4e";
+                toggleRow.appendChild(s);
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 55 + Math.random() * 65;
+                const dx = Math.cos(angle) * dist;
+                const dy = Math.sin(angle) * dist;
+                const size = 0.4 + Math.random() * 0.9;
+
+                s.animate(
+                    [
+                        { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
+                        { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${size})`, opacity: 0 }
+                    ],
+                    { duration: 500 + Math.random() * 350, easing: "cubic-bezier(0.1, 0.7, 0.3, 1)" }
+                ).onfinish = () => s.remove();
+            }
+        }
+
+        function connectedFx() {
+            restartFx(title, "pop");
+            restartFx(status, "flick");
+            restartFx(toggle, "burst");
+            sparks();
+        }
+
+        toggle.addEventListener("change", () => {
+            refresh();
+            if (toggle.checked) connectedFx();
+        });
         refresh();
 
         function syncIdentity() {
@@ -226,6 +379,7 @@
                 setTimeout(() => {
                     toggle.checked = true;
                     refresh();
+                    connectedFx();
                 }, 550);
             }
         });
