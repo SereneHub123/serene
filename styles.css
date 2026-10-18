@@ -163,17 +163,32 @@ body {
     }
 }
 @keyframes toastRight {
-0% {
-        transform: translateY(100px); 
+    from {
+        transform: translateY(100px);
         opacity: 0;
     }
-    10% {
-        transform: translateY(0);   
+
+    to {
+        transform: none;
         opacity: 1;
     }
+}
 
-    
+@keyframes toastSink {
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
 
+@keyframes toastBar {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
 }
 
 .toast {
@@ -192,7 +207,6 @@ body {
     border-radius: 20px;
     justify-content: center;
     gap: 4px;
-    cursor: pointer;
     font-family: "Cinzel", Verdana, Tahoma, sans-serif;
     color:rgba(194, 196, 197, 0.753);
     transition: all 0.3s ease;
@@ -219,3 +233,33 @@ body {
 .toast button:hover {
     background-color: rgba(240, 248, 255, 0.123);
 }
+
+.toast__close {
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Countdown: tells you the toast will leave on its own, and pauses
+   while you are reading or reaching for it. */
+.toast .timer {
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgb(47, 145, 231), rgb(91, 174, 197));
+    transform-origin: left;
+    animation: toastBar 8s linear both;
+}
+
+.toast:hover .timer,
+.toast:focus-within .timer {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .toast,
+    .toast .timer {
+        animation: none;
+    }
+}
+
