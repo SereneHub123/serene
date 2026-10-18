@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Larp</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23141416'/><circle cx='16' cy='16' r='6' fill='%23fb2c4e'/></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Bitcount+Grid+Double:wght@100..900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Nunito", sans-serif;
+            background: #0c0c0e;
+            background-image:
+                radial-gradient(ellipse 60% 40% at 50% -10%, rgba(251, 44, 78, 0.14), transparent),
+                radial-gradient(ellipse 50% 35% at 85% 105%, rgba(251, 44, 78, 0.08), transparent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 340px;
+            background: #161618;
+            border: 1px solid #2a2a2e;
+            border-radius: 24px;
+            padding: 36px 28px 0;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(251, 44, 78, 0.05);
+            position: relative;
+        }
+
+        .title {
+            text-align: center;
+            font-family: "Bitcount Grid Double", monospace;
+            font-weight: 800;
+            font-size: 46px;
+            letter-spacing: 2px;
+            color: #fb2c4e;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+            text-shadow: 0 0 30px rgba(251, 44, 78, 0.4);
+        }
+
+        .card.off .title {
+            color: #4b4b52;
+            text-shadow: none;
+        }
+
+        .input-wrap {
+            margin-top: 22px;
+        }
+
+        .larp-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: "Nunito", sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+            background: #1e1e22;
+            border: 1px solid #34343a;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .larp-input::placeholder {
+            color: #5b5b63;
+            font-weight: 600;
+        }
+
+        .larp-input:focus {
+            border-color: #fb2c4e;
+            box-shadow: 0 0 0 3px rgba(251, 44, 78, 0.18);
+        }
+
+        /* Toggle */
+        .toggle-row {
+            display: flex;
+            justify-content: center;
+            margin: 28px 0 24px;
+        }
+
+        .toggle {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 110px;
+            height: 62px;
+            background: #fb2c4e;
+            border-radius: 999px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.35s ease;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 34px rgba(251, 44, 78, 0.45);
+        }
+
+        .toggle::after {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+            transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.5, 1);
+        }
+
+        .toggle:checked::after {
+            transform: translateX(44px);
+        }
+
+        .card.off .toggle {
+            background: #3a3a40;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Status */
+        .status {
+            text-align: center;
+            font-size: 19px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 30px;
+            transition: color 0.4s ease;
+        }
+
+        .card.off .status {
+            color: #8a8a92;
+        }
+
+        /* Identity bar */
+        .identity-bar {
+            background: #101012;
+            border-top: 1px solid #26262b;
+            margin: 0 -28px;
+            padding: 16px 28px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #a9a9b1;
+        }
+
+        .identity-bar b {
+            color: #fb2c4e;
+            font-weight: 800;
+        }
+
+        .card.off .identity-bar b {
+            color: #6c6c74;
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="card">
+        <div class="title">LARP</div>
+
+        <div class="input-wrap">
+            <input class="larp-input" id="larpInput" type="text" maxlength="24" placeholder="type who u wanna larp as..." autocomplete="off">
+        </div>
+
+        <div class="toggle-row">
+            <input class="toggle" id="toggle" type="checkbox" aria-label="Toggle larping">
+        </div>
+
+        <div class="status" id="status">Disconnected</div>
+
+        <div class="identity-bar">
+            You are larping <b id="identity">pricingn't</b>.
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById("card");
+        const toggle = document.getElementById("toggle");
+        const toggleRow = document.querySelector(".toggle-row");
+        const status = document.getElementById("status");
+        const identity = document.getElementById("identity");
+        const input = document.getElementById("larpInput");
+
+        let identityOn = "Larping";
+        let identityOff = "pricingn't";
+
+        input.value = "";
+
+        function identityText() {
+            const value = input.value.trim().toLowerCase();
+            return value || identityOn;
+        }
+
+        function refresh() {
+            const on = toggle.checked;
+            card.classList.toggle("off", !on);
+            status.textContent = on ? "Connected" : "Disconnected";
+            identity.textContent = on ? identityText() : identityOff;
+        }
+
+        toggleRow.addEventListener("click", (e) => {
+            if (e.target !== toggle) toggle.click();
+        });
+
+        toggle.addEventListener("change", refresh);
+        refresh();
+
+        function syncIdentity() {
+            if (toggle.checked) identity.textContent = identityText();
+        }
+
+        input.addEventListener("input", syncIdentity);
+
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && toggle.checked && input.value.trim()) {
+                toggle.checked = false;
+                refresh();
+                setTimeout(() => {
+                    toggle.checked = true;
+                    refresh();
+                }, 550);
+            }
+        });
+    </script>
+</body>
+</html>
